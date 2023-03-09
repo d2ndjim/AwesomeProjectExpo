@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import PalettePreview from '../components/PalettePreview';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const newColorPalette = route.params ? route.params.newColorPalette : null;
   const [colorPalettes, setColorPalettes] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -24,6 +25,12 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     handleFetchPalettes();
   }, [handleFetchPalettes]);
+
+  useEffect(() => {
+    if (newColorPalette) {
+      setColorPalettes((palettes) => [newColorPalette, ...palettes]);
+    }
+  }, [newColorPalette]);
 
   return (
     <FlatList
@@ -54,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   add: {
-    color: '#6FBABB',
+    color: 'teal',
     marginBottom: 10,
     fontSize: 25,
     fontWeight: 'bold',

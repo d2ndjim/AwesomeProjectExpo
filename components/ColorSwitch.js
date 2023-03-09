@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
-const ColorPaletteSwitch = ({ colorName }) => {
-  const [value, setValue] = useState(false);
+const ColorPaletteSwitch = ({ item, selectedColors, handleValueChange }) => {
   return (
     <View style={styles.switch}>
-      <Text style={styles.header}>{colorName}</Text>
-      <View>
-        <Switch value={value} onValueChange={setValue} />
-      </View>
+      <Text style={styles.header}>{item.colorName}</Text>
+      <Switch
+        value={
+          !!selectedColors.find((color) => color.colorName === item.colorName)
+        }
+        onValueChange={(selected) => {
+          handleValueChange(selected, item);
+        }}
+      />
     </View>
   );
 };

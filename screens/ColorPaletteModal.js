@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import ColorPaletteSwitch from '../components/ColorSwitch';
 
@@ -160,12 +160,31 @@ const COLORS = [
   { colorName: 'YellowGreen', hexCode: '#9ACD' },
 ];
 
-const ColorPaletteModal = () => {
+const ColorPaletteModal = ({ navigation }) => {
   const [paletteName, setPaletteName] = useState('');
+  const [selectedColors, setSelectedColors] = useState([]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!paletteName) {
       Alert.alert('Please enter a palette name');
+    } else if (selectedColors.length < 3) {
+      Alert.alert('Please select at least 3 colors');
+    } else {
+      const newColorPalette = {
+        paletteName,
+        colors: selectedColors,
+      };
+      navigation.navigate('Home', { newColorPalette });
+    }
+  }, [navigation, paletteName, selectedColors]);
+
+  const handleValueChange = (value, color) => {
+    if (value) {
+      setSelectedColors((colors) => [...colors, color]);
+    } else {
+      setSelectedColors((colors) =>
+        colors.filter((c) => c.colorName !== color.colorName),
+      );
     }
   };
 
@@ -181,10 +200,14 @@ const ColorPaletteModal = () => {
         data={COLORS}
         keyExtractor={(item) => item.colorName}
         renderItem={({ item }) => (
-          <ColorPaletteSwitch colorName={item.colorName} />
+          <ColorPaletteSwitch
+            item={item}
+            selectedColors={selectedColors}
+            handleValueChange={handleValueChange}
+          />
         )}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
         <Text>Submit!</Text>
       </TouchableOpacity>
     </View>
@@ -212,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#00767575',
+    backgroundColor: 'teal',
     height: 50,
     borderRadius: 5,
     padding: 10,

@@ -10,13 +10,9 @@ const RootStack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="Home">
+      <RootStack.Navigator>
         <RootStack.Group>
-          <RootStack.Screen
-            name="Home"
-            component={Home}
-            options={{ title: 'My home' }}
-          />
+          <RootStack.Screen name="Home" component={Home} />
           <RootStack.Screen
             name="ColorPalette"
             component={ColorPalette}
