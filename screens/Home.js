@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import PalettePreview from '../components/PalettePreview';
 
 const Home = ({ navigation }) => {
@@ -38,6 +38,13 @@ const Home = ({ navigation }) => {
       )}
       refreshing={isRefreshing}
       onRefresh={handleRefresh}
+      ListHeaderComponent={
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ColorPaletteModal')}
+        >
+          <Text style={styles.add}>Add a color Scheme</Text>
+        </TouchableOpacity>
+      }
     />
   );
 };
@@ -45,6 +52,12 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   list: {
     padding: 10,
+  },
+  add: {
+    color: '#6FBABB',
+    marginBottom: 10,
+    fontSize: 25,
+    fontWeight: 'bold',
   },
 });
 
