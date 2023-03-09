@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import PalettePreview from '../components/PalettePreview';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const newColorPalette = route.params ? route.params.newColorPalette : null;
   const [colorPalettes, setColorPalettes] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -25,6 +26,12 @@ const Home = ({ navigation }) => {
     handleFetchPalettes();
   }, [handleFetchPalettes]);
 
+  useEffect(() => {
+    if (newColorPalette) {
+      setColorPalettes((palettes) => [newColorPalette, ...palettes]);
+    }
+  }, [newColorPalette]);
+
   return (
     <FlatList
       style={styles.list}
@@ -38,6 +45,13 @@ const Home = ({ navigation }) => {
       )}
       refreshing={isRefreshing}
       onRefresh={handleRefresh}
+      ListHeaderComponent={
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ColorPaletteModal')}
+        >
+          <Text style={styles.add}>Add a color Scheme</Text>
+        </TouchableOpacity>
+      }
     />
   );
 };
@@ -45,6 +59,12 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   list: {
     padding: 10,
+  },
+  add: {
+    color: 'teal',
+    marginBottom: 10,
+    fontSize: 25,
+    fontWeight: 'bold',
   },
 });
 
