@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import uuid from 'react-native-uuid';
 import ColorPaletteSwitch from '../components/ColorSwitch';
 
 const COLORS = [
@@ -171,6 +172,7 @@ const ColorPaletteModal = ({ navigation }) => {
       Alert.alert('Please select at least 3 colors');
     } else {
       const newColorPalette = {
+        id: uuid.v4(),
         paletteName,
         colors: selectedColors,
       };
